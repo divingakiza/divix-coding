@@ -1,0 +1,36 @@
+a=imread('truescaleimage.jpg');
+b=imread('greyscaleimage.jpg');
+% Compute the optimal threshold using Otsu's method
+level = graythresh(b);
+% Convert the grayscale image to a binary image using the optimal threshold
+c= imbinarize(b, level);
+
+% Define structuring element.
+SE=strel('disk',5);
+ 
+% Erode the image.
+d=imerode(c,SE);
+ 
+% Take the difference of original
+% and eroded image.
+e= c-d;
+sm =strel('line',16,-45);
+f=imdilate(c,sm);
+subplot(3,2,1);
+imshow(a);
+title('true color image')
+subplot(3,2,2)
+imshow(b);
+title('gray scale image')
+subplot(3,2,3);
+imshow(c);
+title('binary image')
+subplot(3,2,4);
+imhist(b);
+title('histogram')
+subplot(3,2,5);
+imshow(e);
+title('boundary')
+subplot(3,2,6);
+imshow(f);
+title('diluted image')
