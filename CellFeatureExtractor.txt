@@ -1,0 +1,34 @@
+TrueImage = imread("./../Dataset/TrueColour/Monocyte/95-8-1-1_598_1.jpg");
+GrayImage = imread("./../Dataset/GrayScale/Monocyte/95-8-1-1_598_1.jpg");
+I_gray= GrayImage;  
+I = TrueImage;
+subplot(2,2,1), imshow (TrueImage), title("True image");
+subplot(2,2,2), imshow (GrayImage), title("Gray image");
+subplot(2,2,3), imhist(GrayImage), title("Gray histogram");
+
+%Use Otsu's method to calculate the optimal threshold value
+level = graythresh(GrayImage);
+MeanValue = mean(GrayImage(:));
+
+
+% Apply thresholding using the optimal threshold value
+I_bw = imbinarize(I_gray, level);
+
+% Display the original image and the thresholded image side-by-side
+%figure;
+%subplot(1,2,1); imshow(I); title('Original Image');
+subplot(2,2,4); imshow(I_bw); title('Thresholded Image');
+% Extract the boundary of the binary image
+%boundary = bwperim(I_bw);
+SE1 = ones(3,3);
+i_erode = imerode(I_bw, SE1);
+boundary = imsubtract(I_bw, i_erode);
+figure;
+imshow(boundary);
+
+% Calculate the perimeter of the boundary
+perimeter = sum(boundary(:));
+
+% Calculate the area of the binary image
+area = sum(I_bw(:));
+%subplot(3,3,9),imshow(boundary), title("Boundary image");
